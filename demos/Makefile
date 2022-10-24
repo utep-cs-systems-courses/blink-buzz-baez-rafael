@@ -11,6 +11,8 @@ all:
 	(cd 9* && make)
 	(cd 10* && make)
 	(cd 11* && make)
+	(cd project && make)
+
 
 clean:
 	(cd timerLib && make clean)
@@ -25,4 +27,5 @@ clean:
 	(cd 9* && make clean)
 	(cd 10* && make clean)
 	(cd 11* && make clean)
+	(cd project && make clean)
 	rm -rf h lib
