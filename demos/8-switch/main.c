@@ -1,8 +1,8 @@
 #include <msp430.h>
 #include "libTimer.h"
 
-#define LED_RED BIT0               // P1.0
-#define LED_GREEN BIT6             // P1.6
+#define LED_RED BIT6               // P1.0
+#define LED_GREEN BIT0             // P1.6
 #define LEDS (BIT0 | BIT6)
 
 #define SW1 BIT3		/* switch1 is p1.3 */
@@ -11,7 +11,8 @@
 void main(void) 
 {  
   configureClocks();
-
+  enableWDTInterrupts();
+  
   P1DIR |= LEDS;
   P1OUT &= ~LEDS;		/* leds initially off */
   
@@ -23,6 +24,7 @@ void main(void)
   or_sr(0x18);  // CPU off, GIE on
 } 
 
+static int state = 0;
 void
 switch_interrupt_handler()
 {
@@ -32,21 +34,18 @@ switch_interrupt_handler()
   P1IES |= (p1val & SWITCHES);	/* if switch up, sense down */
   P1IES &= (p1val | ~SWITCHES);	/* if switch down, sense up */
 
-/* up=red, down=green */
-  if (!(P1OUT & LEDS)){
-    P1OUT |= LED_RED;
-    P1OUT &= ~LED_GREEN; 
-  }
   if (!(p1val & SW1)) {
-    P1OUT ^= LED_RED;
-    P1OUT ^= LED_GREEN;
+    //P1OUT ^= LED_RED;
+    //P1OUT ^= LED_GREEN;
+    if (state == 1) state = 2;
+    else if (state == 2) state = 1;
   }
-  /*
-  else {
-    P1OUT |= LED_GREEN;
-    P1OUT &= ~LED_RED;
+  
+  if (!(P1OUT & LEDS) & state == 0){
+    P1OUT |= LED_RED;
+    P1OUT &= ~LED_GREEN;
+    state = 2;
   }
-  */
 }
 
 
@@ -56,5 +55,20 @@ __interrupt_vec(PORT1_VECTOR) Port_1(){
   if (P1IFG & SWITCHES) {	      /* did a button cause this interrupt? */
     P1IFG &= ~SWITCHES;		      /* clear pending sw interrupts */
     switch_interrupt_handler();	/* single handler for all switches */
+  }
+}
+
+static int secondCount = 0;
+void __interrupt_vec(WDT_VECTOR) WDT()
+{
+  
+  if (state == 1) P1OUT &= ~LED_GREEN;
+  if (state == 2) P1OUT &= ~LED_RED;
+  
+  secondCount++;
+  if (secondCount >= 250) {
+    secondCount = 0;
+    if (state == 1) P1OUT ^= LED_RED;
+    if (state == 2) P1OUT ^= LED_GREEN;
   }
 }
