@@ -7,6 +7,7 @@
 
 void greenControl(int on);
 static int blinkLimit;
+static int blinkCount;
 void blinkUpdate();
 
 #endif // included
