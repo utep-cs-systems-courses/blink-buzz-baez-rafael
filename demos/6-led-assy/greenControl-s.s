@@ -1,13 +1,13 @@
 	.arch msp430g2553
 	.p2align 1,0
+	.data
+tempSub:	.word 0
+blinkLimit:	.long 5
+blinkCount:	.long 0
 	.text
-
 
 	.global greenControl
 	.global blinkUpdate
-	.global blinkLimit
-	.global blinkCount
-	.extern tempSub
 	.extern P1OUT
 
 greenControl:
@@ -22,15 +22,14 @@ blinkUpdate:
 	add #1, blinkCount
 	mov #blinkCount, tempSub
 	sub blinkLimit, tempSub
-	cmp #0, C
-	jz bUpdateOff
+	jc bUpdateOff
 	mov #0, blinkCount
 	clrc
 	mov #1, r12
-	jz greenControl
+	call greenControl
 	pop r0
 bUpdateOff:	clrc
-	mov #1, r12
-	jz greenControl
+	mov #0, r12
+	call greenControl
 	pop r0
 	
