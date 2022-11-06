@@ -20,20 +20,7 @@ void waitCycle()
     ticks = 0;
   }
 }
-void delay(unsigned int ms)
-{
-  volatile unsigned int i, ms2;
-  i = time;
-  ms2 = ms*2;
-  while((time-i) < ms2);
-}
-
 void tickMethod()
 {
   waitCycle();
 }
-void increaseTime()
-{
-  time++;
-}
-
