@@ -1,5 +1,5 @@
 # Makefile
-COMMON_OBJECTS = main.o led.o stateMachines.o switches.o timeMethods.o stateMusic.o stateLights.o p2_interrupt_handler.o wdInterruptHandler.o
+COMMON_OBJECTS = main.o led.o buzzer.o stateMachines.o switches.o timeMethods.o stateMusic.o stateLights.o p2_interrupt_handler.o wdInterruptHandler.o
 CPU	       = msp430g2553
 CFLAGS	       = -mmcu=${CPU} -I../h
 LDFLAGS	       = -L/opt/ti/msp430_gcc/include

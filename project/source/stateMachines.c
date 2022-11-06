@@ -62,7 +62,7 @@ void music(char sig)
       setLocation(0);
       break;
     case 3:
-      setLocation(-10);
+      setLocation(-3);
       break;
     }
 }
@@ -75,7 +75,6 @@ void switch_state(char sig)
       lights(sig);
       break;
     case 2:
-      wait(250);
       flashing_lights(sig);
       break;
     case 3:
@@ -84,5 +83,6 @@ void switch_state(char sig)
     default:
       toyState = sig;
       led_update(sig);
+      setCycle(500);
     }
 }

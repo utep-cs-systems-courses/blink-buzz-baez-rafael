@@ -4,31 +4,26 @@
 #include "stateLights.h"
 
 static char enable = 0;
-void setEnableL(char signal)
+void setEnableL(int signal)
 {
-  if (signal < 0)
+  if (signal == -1)
     {
-      if (enable == 0)
-	{
-	  enable = 1;
-	}
-      else
-	{
-	  enable = 0;
-	}
-      return;
+      enable = (enable)?0:1;
     }
-  enable = signal;
+  else
+    {
+      enable = signal;
+    }
 }
 void useSignal(char signal)
 {
   switch(signal)
     {
     case 1:
-      wait(62);
+      setCycle(62);
       break;
     case 2:
-      wait(125);
+      setCycle(125);
       break;
     case 3:
       setEnableL(-1);
@@ -37,9 +32,8 @@ void useSignal(char signal)
 }
 void advanceLights()
 {
-  if (!enable)
+  if (enable)
     {
-      return;
+      led_update(4);
     }
-  led_update(4);
 }
