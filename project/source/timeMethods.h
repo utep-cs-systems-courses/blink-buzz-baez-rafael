@@ -3,4 +3,5 @@
 
 void tickMethod();
 void setCycle(int delay);
+void waitCycle();
 #endif

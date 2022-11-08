@@ -20,7 +20,3 @@ void waitCycle()
     ticks = 0;
   }
 }
-void tickMethod()
-{
-  waitCycle();
-}

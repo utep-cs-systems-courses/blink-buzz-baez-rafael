@@ -16,8 +16,15 @@ clean:
 	rm -f *.o *.elf
 
 # Last rules
-final.elf: ${COMMON_OBJECTS} ../lib/libTimer.a
+final.elf: ${COMMON_OBJECTS} tickMethod-c.o ../lib/libTimer.a
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
-
+final-s.elf: ${COMMON_OBJECTS} tickMethod-s.o ../lib/libTimer.a
+	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 load: final.elf
 	msp430loader.sh final.elf
+load-s: final-s.elf
+	msp430loader.sh final-s.elf
+
+tickMethod-c.o: timeMethods.h
+
+wdInterruptHandler.o: timeMethods.h
